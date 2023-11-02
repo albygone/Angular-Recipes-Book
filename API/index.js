@@ -13,13 +13,12 @@ const uri = "mongodb+srv://albygone:legomania05@maincluster.lri6hlm.mongodb.net/
 console.log(process.env);
 if (uri.length > 0) {
     const client = new mongodb_1.MongoClient(uri);
-    app.get('/', async (req, res) => {
+    app.get('/getAll', async (req, res) => {
         try {
             const database = client.db('ricette');
             const movies = database.collection('ricette');
-            // Query for a movie that has the title 'Back to the Future'
             const query = {};
-            const result = await movies.find(query);
+            const result = await movies.find().toArray();
             res.send(result);
         }
         finally {

@@ -36,3 +36,7 @@ if(uri.length > 0){
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
   });
 }
+
+//C:\Users\albyg\Documents\Sincronizzati\Scuola\2023-2024\TPSIT\PROGETTI\tpsit_ricette\API <-- TypeScript compiler
+//C:\Users\albyg\Documents\Sincronizzati\Scuola\2023-2024\TPSIT\PROGETTI\tpsit_ricette\API <-- Node.js runtime
+//C:\Users\albyg\Documents\Sincronizzati\Scuola\2023-2024\TPSIT\PROGETTI\tpsit_ricette     <-- Git

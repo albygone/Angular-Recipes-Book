@@ -6,26 +6,100 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongodb_1 = require("mongodb");
 const dotenv_1 = __importDefault(require("dotenv"));
+const body_parser_1 = __importDefault(require("body-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+app.use(body_parser_1.default.json());
+app.use(body_parser_1.default.urlencoded({
+    extended: true,
+}));
 const port = process.env.PORT;
-const uri = "mongodb+srv://albygone:legomania05@maincluster.lri6hlm.mongodb.net/";
-console.log(process.env);
+const uri = process.env.CNSTRING ?? '';
 if (uri.length > 0) {
-    const client = new mongodb_1.MongoClient(uri);
     app.get('/getAll', async (req, res) => {
+        const client = new mongodb_1.MongoClient(uri);
         try {
             const database = client.db('ricette');
-            const movies = database.collection('ricette');
-            const query = {};
-            const result = await movies.find().toArray();
+            const recipes = database.collection('ricette');
+            const result = await recipes.find().toArray();
             res.send(result);
         }
         finally {
             await client.close();
         }
     });
+    app.get('/getSingle', async (req, res) => {
+        const client = new mongodb_1.MongoClient(uri);
+        try {
+            const database = client.db('ricette');
+            const recipes = database.collection('ricette');
+            const query = {};
+            for (const key in req.query)
+                query[key] =
+                    key == '_id'
+                        ? new mongodb_1.ObjectId(req.query[key]?.toString()) ?? ''
+                        : req.query[key];
+            const result = await recipes.find(query).toArray();
+            res.send(result);
+        }
+        finally {
+            await client.close();
+        }
+    });
+    app.post('/insertSingle', async (req, res) => {
+        const client = new mongodb_1.MongoClient(uri);
+        try {
+            const database = client.db('ricette');
+            const recipes = database.collection('ricette');
+            recipes.insertOne(req.body);
+            res.send('ok');
+        }
+        finally {
+            await client.close();
+        }
+    });
+    app.post('/insertMultiple', async (req, res) => {
+        const client = new mongodb_1.MongoClient(uri);
+        try {
+            const database = client.db('ricette');
+            const recipes = database.collection('ricette');
+            recipes.insertMany(req.body);
+            res.send('ok');
+        }
+        finally {
+            await client.close();
+        }
+    });
+    app.post('/update', async (req, res) => {
+        const client = new mongodb_1.MongoClient(uri);
+        try {
+            const database = client.db('ricette');
+            const recipes = database.collection('ricette');
+            const id = new mongodb_1.ObjectId(req.body._id ?? '');
+            delete req.body._id;
+            recipes.updateOne({ _id: id }, { $set: req.body });
+            res.send('ok');
+        }
+        finally {
+            await client.close();
+        }
+    });
+    app.post('/delete', async (req, res) => {
+        const client = new mongodb_1.MongoClient(uri);
+        try {
+            const database = client.db('ricette');
+            const recipes = database.collection('ricette');
+            const filter = req.body;
+            if (req.body._id !== undefined)
+                filter._id = new mongodb_1.ObjectId(req.body._id);
+            recipes.deleteOne(filter);
+            res.send('ok');
+        }
+        finally {
+            await client.close();
+        }
+    });
     app.listen(port, () => {
-        console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+        console.log(`⚡️[server]: Server is running at port ${port}`);
     });
 }

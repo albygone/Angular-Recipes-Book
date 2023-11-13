@@ -1,0 +1,13 @@
+nav,
+main {
+  width: 100%;
+}
+
+nav {
+  margin: 30px !important;
+  border-radius: 15px;
+  width: calc(100vw - 60px) !important;
+  padding: 20px !important;
+  position: fixed !important;
+  top: 0;
+}

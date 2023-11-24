@@ -42,13 +42,15 @@ if (uri.length > 0) {
       const recipes = database.collection<recipe>('ricette');
 
       const result = await recipes.find().toArray();
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.send(result);
     } finally {
       await client.close();
     }
   });
 
-  app.get('/getSingle', async (req: Request, res: Response) => {
+  app.get('/getFilter', async (req: Request, res: Response) => {
     const client = new MongoClient(uri);
 
     try {
@@ -61,10 +63,11 @@ if (uri.length > 0) {
         query[key] =
           key == '_id'
             ? new ObjectId(req.query[key]?.toString()) ?? ''
-            : req.query[key];
+            : req.query[key]; 
 
       const result = await recipes.find(query).toArray();
 
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.send(result);
     } finally {
       await client.close();
@@ -80,6 +83,7 @@ if (uri.length > 0) {
 
       recipes.insertOne(req.body);
 
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.send('ok');
     } finally {
       await client.close();
@@ -95,6 +99,7 @@ if (uri.length > 0) {
 
       recipes.insertMany(req.body);
 
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.send('ok');
     } finally {
       await client.close();
@@ -113,6 +118,8 @@ if (uri.length > 0) {
       delete req.body._id;
 
       recipes.updateOne({ _id: id }, { $set: req.body });
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.send('ok');
     } finally {
       await client.close();
@@ -132,6 +139,7 @@ if (uri.length > 0) {
 
       recipes.deleteOne(filter);
 
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.send('ok');
     } finally {
       await client.close();

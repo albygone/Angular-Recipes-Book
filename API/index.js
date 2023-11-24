@@ -22,13 +22,14 @@ if (uri.length > 0) {
             const database = client.db('ricette');
             const recipes = database.collection('ricette');
             const result = await recipes.find().toArray();
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.send(result);
         }
         finally {
             await client.close();
         }
     });
-    app.get('/getSingle', async (req, res) => {
+    app.get('/getFilter', async (req, res) => {
         const client = new mongodb_1.MongoClient(uri);
         try {
             const database = client.db('ricette');
@@ -40,6 +41,7 @@ if (uri.length > 0) {
                         ? new mongodb_1.ObjectId(req.query[key]?.toString()) ?? ''
                         : req.query[key];
             const result = await recipes.find(query).toArray();
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.send(result);
         }
         finally {
@@ -52,6 +54,7 @@ if (uri.length > 0) {
             const database = client.db('ricette');
             const recipes = database.collection('ricette');
             recipes.insertOne(req.body);
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.send('ok');
         }
         finally {
@@ -64,6 +67,7 @@ if (uri.length > 0) {
             const database = client.db('ricette');
             const recipes = database.collection('ricette');
             recipes.insertMany(req.body);
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.send('ok');
         }
         finally {
@@ -78,6 +82,7 @@ if (uri.length > 0) {
             const id = new mongodb_1.ObjectId(req.body._id ?? '');
             delete req.body._id;
             recipes.updateOne({ _id: id }, { $set: req.body });
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.send('ok');
         }
         finally {
@@ -93,6 +98,7 @@ if (uri.length > 0) {
             if (req.body._id !== undefined)
                 filter._id = new mongodb_1.ObjectId(req.body._id);
             recipes.deleteOne(filter);
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.send('ok');
         }
         finally {

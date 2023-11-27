@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Recipe } from '../models/recipes';
-
+import {Recipe } from '../models/Recipes';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +17,7 @@ export class ApiControllerService {
   async getSingleRecipes(query: Map<string, string>): Promise<Recipe[]> {
 
     let queryUrlEncode = '';
-    query.forEach(([value, key]) => {
+    query.forEach((value, key) => {
       queryUrlEncode += `${key}=${value}&`;
     });
 
@@ -30,9 +29,14 @@ export class ApiControllerService {
 
   async insertSingle(body: object): Promise<boolean> {
 
+    console.log(body);
+
     const data = await fetch(`${ApiControllerService.API_URL}/insertSingle`, {
       method: 'POST',
       body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     return (await data.text()) == 'ok';
@@ -43,6 +47,9 @@ export class ApiControllerService {
     const data = await fetch(`${ApiControllerService.API_URL}/insertSingle`, {
       method: 'POST',
       body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     return (await data.text()) == 'ok';
@@ -53,6 +60,9 @@ export class ApiControllerService {
     const data = await fetch(`${ApiControllerService.API_URL}/update`, {
       method: 'POST',
       body: JSON.stringify(newObject),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     return (await data.text()) == 'ok';
@@ -63,6 +73,9 @@ export class ApiControllerService {
     const data = await fetch(`${ApiControllerService.API_URL}/delete`, {
       method: 'POST',
       body: JSON.stringify(filter),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     return (await data.text()) == 'ok';

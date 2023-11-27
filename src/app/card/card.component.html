@@ -1,0 +1,77 @@
+<div class="card" *ngIf="!isOpen">
+    <div class="card__img"><img src="{{recipe.imageUrl}}"/></div>
+    <div class="card__avatar" class="difficulty{{recipe.difficulty}} difficulty" [ngSwitch]="recipe.difficulty">
+        <p *ngSwitchCase="1">Facile</p>
+        <p *ngSwitchCase="2">Medio</p>
+        <p *ngSwitchCase="3">Avanzato</p>
+        <p *ngSwitchCase="4">Difficile</p>
+        <p *ngSwitchCase="5">Usa just eat</p>
+        <p *ngSwitchDefault="">0</p>
+    </div>
+    <div class="card__title">{{recipe.description}}</div>
+    <div class="card__wrapper">
+        <button class="card__btn" (click)="openBigCard()">Apri</button>
+    </div>
+</div>
+
+<div id="bigCardWrapper" *ngIf="isOpen"> 
+    <div class="bigCard">
+        <div class="card__img__big"><img src="{{recipe.imageUrl}}"/></div>
+        <div class="difficulty{{recipe.difficulty}} difficulty card__avatar__big" [ngSwitch]="recipe.difficulty">
+            <p *ngSwitchCase="1">Facile</p>
+            <p *ngSwitchCase="2">Medio</p>
+            <p *ngSwitchCase="3">Avanzato</p>
+            <p *ngSwitchCase="4">Difficile</p>
+            <p *ngSwitchCase="5">Usa just eat</p>
+            <p *ngSwitchDefault="">0</p>
+        </div>
+        <div class="card__title__big">{{recipe.description}}</div>
+        <div class="card_scroll_big">
+            <h3>Ingredienti</h3>
+            <br>
+            <ul>
+                <li *ngFor="let ingredient of recipe.ingredients">{{ingredient.name}}  ⚖️{{ingredient.quantity != -1 ? ingredient.quantity + ' ' + ingredient.unit : "A sentimento"}}</li>
+            </ul>
+            <h3>Procedura</h3>
+            <br>
+            <ul>
+                <li *ngFor="let step of recipe.steps">{{step}}</li>
+            </ul>
+        </div>
+        <div class="card__wrapper">
+            <button class="card__btn__big" (click)="openEditPage()">✏️</button>
+            <button class="card__btn__big" (click)="closeBigCard()">Chiudi</button>
+        </div>
+    </div>
+</div>
+
+<div id="bigCardWrapper" *ngIf="isEditOpen"> 
+    <div class="bigCard">
+        <div class="card__img__big"><img src="{{recipe.imageUrl}}"/></div>
+        <div class="difficulty{{recipe.difficulty}} difficulty card__avatar__big" [ngSwitch]="recipe.difficulty">
+            <p *ngSwitchCase="1">Facile</p>
+            <p *ngSwitchCase="2">Medio</p>
+            <p *ngSwitchCase="3">Avanzato</p>
+            <p *ngSwitchCase="4">Difficile</p>
+            <p *ngSwitchCase="5">Usa just eat</p>
+            <p *ngSwitchDefault="">0</p>
+        </div>
+        <div class="card__title__big">{{recipe.description}}</div>
+        <div class="card_scroll_big">
+            <h3>Ingredienti</h3>
+            <br>
+            <ul>
+                <li *ngFor="let ingredient of recipe.ingredients">{{ingredient.name}}  ⚖️{{ingredient.quantity != -1 ? ingredient.quantity + ' ' + ingredient.unit : "A sentimento"}}</li>
+            </ul>
+            <h3>Procedura</h3>
+            <br>
+            <ul>
+                <li *ngFor="let step of recipe.steps">{{step}}</li>
+            </ul>
+        </div>
+        <div class="card__wrapper">
+            <button class="card__btn__big" (click)="openEditPage()">✏️</button>
+            <button class="card__btn__big" (click)="closeBigCard()">Chiudi</button>
+        </div>
+    </div>
+</div>

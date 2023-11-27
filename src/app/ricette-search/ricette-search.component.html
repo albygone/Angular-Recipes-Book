@@ -1,10 +1,10 @@
 <div>
    <form action="" class="search-bar">
-      <input type="search" name="search" pattern=".*\S.*" required>
+      <input type="search" name="search" pattern=".*\S.*" required (keyup)="newQuery($event)">
       <button class="search-btn" type="submit">
          <span>Cerca</span>
       </button>
    </form>
 </div>
 
-<app-recipes-list></app-recipes-list>
+<app-recipes-list [query]="query"></app-recipes-list>

@@ -9,10 +9,19 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+const setHeaders = (res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+};
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({
     extended: true,
 }));
+app.use((req, res, next) => {
+    setHeaders(res);
+    next();
+});
 const port = process.env.PORT;
 const uri = process.env.CNSTRING ?? '';
 if (uri.length > 0) {

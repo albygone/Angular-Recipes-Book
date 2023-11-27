@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./ricette-search.component.css']
 })
 export class RicetteSearchComponent {
-
+  query: string = "1";
+  newQuery(event: Event){
+    this.query = (event.target as HTMLInputElement).value;
+  }
 }

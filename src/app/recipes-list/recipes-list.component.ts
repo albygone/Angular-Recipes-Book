@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChange } from '@angular/core';
 import { ApiControllerService } from '../services/api-controller.service';
+import { Recipe } from '../models/Recipes';
 
 @Component({
   selector: 'app-recipes-list',
@@ -10,11 +11,19 @@ export class RecipesListComponent {
 
     readonly apiController = new ApiControllerService();
 
-    constructor() {
-        this.faiCose();   
+    Recipes!: Recipe[];
+
+    @Input() query: string = ""; 
+
+    ngOnChanges(changes: SimpleChange) {
+        console.log(changes);
     }
 
-    async faiCose(){
-        console.log(await this.apiController.getAllRecipes());
+    constructor() {
+        this.getRecipes();
+    }
+    
+    async getRecipes() {
+        this.Recipes = await this.apiController.getAllRecipes();
     }
 }

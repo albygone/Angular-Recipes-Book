@@ -10,7 +10,7 @@ type Recipe = {
     _id: string;
     description: string;
     difficulty: number;
-    timeSpan: Timestamp;
+    timeSpan: Timestamp | null;
     imageUrl: string;
     steps: string[];
     ingredients: Ingredient[];

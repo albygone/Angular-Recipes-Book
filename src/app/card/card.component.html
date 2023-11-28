@@ -22,7 +22,7 @@
         <br>
 
         <div class="wave-group">
-            <input required="" type="text" class="input" value="{{recipe.description}}">
+            <input required="" type="text" class="input" value="{{recipe.description}}" (keyup)="editRecipe('description', $event)">
             <span class="bar"></span>
             <label class="label">
               <span class="label-char" style="--index: 0">D</span>
@@ -42,7 +42,7 @@
         <br />
 
         <div class="wave-group">
-            <input required="" type="text" class="input" value="{{recipe.imageUrl}}">
+            <input required="" type="text" class="input" value="{{recipe.imageUrl}}" (keyup)="editRecipe('imageUrl', $event)">
             <span class="bar"></span>
             <label class="label">
               <span class="label-char" style="--index: 0">I</span>
@@ -59,7 +59,7 @@
         <br />
 
         <div class="wave-group">
-            <input required="" type="number" max="5" min="1" step="1" class="input" value="{{recipe.difficulty}}">
+            <input required="" type="number" max="5" min="1" step="1" class="input" value="{{recipe.difficulty}}" (keyup)="editRecipe('difficulty', $event)">
             <span class="bar"></span>
             <label class="label">
               <span class="label-char" style="--index: 0">D</span>
@@ -84,10 +84,10 @@
         <h5>Ingredienti</h5>
         <br>
         <div class="formScroll">
-            <div *ngFor="let ingredient of recipe.ingredients">
+            <div *ngFor="let ingredient of recipe.ingredients; index as i">
                 <div class="ingredientRow">
                     <div class="wave-group">
-                        <input required="" type="text" class="input" value="{{ingredient.name}}">
+                        <input required="" type="text" class="input" value="{{ingredient.name}}" (keyup)="editRecipe('ingredients', $event, i, 'name')">
                         <span class="bar"></span>
                         <label class="label">
                           <span class="label-char" style="--index: 0">N</span>
@@ -97,7 +97,7 @@
                         </label>
                     </div>
                     <div class="wave-group">
-                        <input required="" type="text" class="input" [value]="ingredient.quantity != -1 ? ingredient.quantity : 'quanto basta'">
+                        <input required="" type="text" class="input" [value]="ingredient.quantity != -1 ? ingredient.quantity : 'quanto basta'" (keyup)="editRecipe('ingredients', $event, i, 'quantity')">
                         <span class="bar"></span>
                         <label class="label">
                           <span class="label-char" style="--index: 0">Q</span>
@@ -106,7 +106,7 @@
                         </label>
                     </div>
                     <div class="wave-group">
-                        <input required="" type="text" class="input" value="{{ingredient.unit}}">
+                        <input required="" type="text" class="input" value="{{ingredient.unit}}" (keyup)="editRecipe('ingredients', $event, i, 'unit')">
                         <span class="bar"></span>
                         <label class="label">
                           <span class="label-char" style="--index: 0">U</span>
@@ -116,6 +116,7 @@
                           <span class="label-char" style="--index: 4">à</span>
                         </label>
                     </div>
+                    <button required="" type="text" class="input" style="width: 50px;" value="{{ingredient.unit}}" (click)="deleteFromArray('ingredients', i)">🗑️</button>
                 </div>
                 <br />
             </div>
@@ -127,17 +128,20 @@
         <br>
         <div class="formScroll">
             <div *ngFor="let step of recipe.steps; index as i">
-                <div class="wave-group">
-                    <input required="" type="text" class="input" value="{{step}}">
-                    <span class="bar"></span>
-                    <label class="label">
-                      <span class="label-char" style="--index: 0">S</span>
-                      <span class="label-char" style="--index: 1">t</span>
-                      <span class="label-char" style="--index: 2">e</span>
-                      <span class="label-char" style="--index: 3">p</span>
-                      <span class="label-char" style="--index: 4">&nbsp;</span>
-                      <span class="label-char" style="--index: 4">{{i+1}}</span>
-                    </label>
+                <div class="stepRow">
+                    <div class="wave-group">
+                        <input required="" type="text" class="input" value="{{step}}" (change)="editRecipe('steps', $event, i)">
+                        <span class="bar"></span>
+                        <label class="label">
+                          <span class="label-char" style="--index: 0">S</span>
+                          <span class="label-char" style="--index: 1">t</span>
+                          <span class="label-char" style="--index: 2">e</span>
+                          <span class="label-char" style="--index: 3">p</span>
+                          <span class="label-char" style="--index: 4">&nbsp;</span>
+                          <span class="label-char" style="--index: 4">{{i+1}}</span>
+                        </label>
+                    </div>
+                    <button required="" type="text" class="input" style="width: 50px;" (click)="deleteFromArray('steps', i)">🗑️</button>
                 </div>
                 <br />
             </div>
@@ -169,7 +173,9 @@
             </ul>
         </div>
         <div class="card__wrapper">
-            <button class="card__btn__big" (click)="openEditPage()">✏️</button>
+            <button *ngIf="!isEditOpen" class="card__btn__big" (click)="openEditPage()">✏️</button>
+            <button *ngIf="isEditOpen" class="card__btn__big" (click)="saveRecipe()">✔️</button>
+            <button *ngIf="isEditOpen" class="card__btn__big" (click)="deleteRecipe()">❌</button>
             <button class="card__btn__big" (click)="closeButton()">Chiudi</button>
         </div>
     </div>

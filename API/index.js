@@ -57,6 +57,31 @@ if (uri.length > 0) {
             await client.close();
         }
     });
+    app.get('/check', async (req, res) => {
+        const client = new mongodb_1.MongoClient(uri);
+        try {
+            const database = client.db('ricette');
+            const recipes = database.collection('ricette');
+            const query = {};
+            let result;
+            if (req.query._id != '' && req.query._id != undefined) {
+                for (const key in req.query)
+                    query[key] =
+                        key == '_id'
+                            ? new mongodb_1.ObjectId(req.query[key]?.toString()) ?? ''
+                            : req.query[key];
+                result = recipes.findOne(query);
+            }
+            else {
+                result = new Promise((resolve) => resolve(null));
+            }
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.send(await result != null);
+        }
+        finally {
+            await client.close();
+        }
+    });
     app.post('/insertSingle', async (req, res) => {
         const client = new mongodb_1.MongoClient(uri);
         try {

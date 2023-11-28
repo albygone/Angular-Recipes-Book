@@ -1,5 +1,5 @@
-import express, { Express, Request, Response, json } from 'express';
-import { MongoClient, ObjectId, Timestamp } from 'mongodb';
+import express, { Express, Request, Response} from 'express';
+import { MongoClient, ObjectId, Timestamp, WithId} from 'mongodb';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 
@@ -85,13 +85,42 @@ if (uri.length > 0) {
     }
   });
 
-  app.post('/insertSingle', async (req: Request, res: Response) => {
+  app.get('/check', async (req: Request, res: Response) => {
     const client = new MongoClient(uri);
 
     try {
       const database = client.db('ricette');
       const recipes = database.collection<recipe>('ricette');
 
+      const query: any = {};
+      let result: Promise<WithId<recipe> | null>;
+
+      if(req.query._id != '' && req.query._id != undefined) {
+        for (const key in req.query)
+          query[key] =
+            key == '_id'
+              ? new ObjectId(req.query[key]?.toString()) ?? ''
+              : req.query[key];
+  
+        result = recipes.findOne(query);
+      }else{
+        result = new Promise((resolve) => resolve(null));
+      }
+      res.setHeader('Access-Control-Allow-Origin', '*');
+
+      res.send(await result != null);
+    } finally {
+      await client.close();
+    }
+  });
+
+  app.post('/insertSingle', async (req: Request, res: Response) => {
+    const client = new MongoClient(uri);
+
+    try {
+      const database = client.db('ricette');
+      const recipes = database.collection<recipe>('ricette');
+      
       recipes.insertOne(req.body);
 
       res.setHeader('Access-Control-Allow-Origin', '*');

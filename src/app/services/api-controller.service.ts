@@ -27,6 +27,19 @@ export class ApiControllerService {
     return (await data.json()) as Recipe[];
   }
 
+  async check(query: Map<string, string>): Promise<boolean> {
+
+    let queryUrlEncode = '';
+    query.forEach((value, key) => {
+      queryUrlEncode += `${key}=${value}&`;
+    });
+
+    const data = await fetch(
+      `${ApiControllerService.API_URL}/check?${queryUrlEncode}`);
+
+    return (await data.text()) == "true";
+  }
+
   async insertSingle(body: object): Promise<boolean> {
 
     console.log(body);

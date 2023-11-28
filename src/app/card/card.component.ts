@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Recipe } from '../models/Recipes';
+import { Recipe, Ingredient } from '../models/Recipes';
 
 @Component({
   selector: 'app-card',
@@ -7,6 +7,7 @@ import { Recipe } from '../models/Recipes';
   styleUrls: ['./card.component.css']
 })
 export class CardComponent {
+
   @Input() recipe!: Recipe;
 
   isOpen = false;
@@ -21,10 +22,34 @@ export class CardComponent {
   }
 
   openEditPage(){
+    this.closeBigCard();
     this.isEditOpen = true;
   }
 
   closeEditPage(){
     this.isEditOpen = false;
+  }
+
+  closeButton() {
+    if(this.isEditOpen){
+      this.closeEditPage();
+    }else{
+      this.closeBigCard();
+    }
+  }
+
+  addIngredient(){
+
+    const newIngredient: Ingredient = {
+      name: "",
+      quantity: 0,
+      unit: ""
+    }
+
+    this.recipe.ingredients.push(newIngredient);
+  }
+
+  addStep(){
+    this.recipe.steps.push("");
   }
 }

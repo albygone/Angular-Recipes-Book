@@ -8,9 +8,10 @@ import { ApiControllerService } from '../services/api-controller.service';
   styleUrls: ['./card.component.css']
 })
 export class CardComponent {
-
   @Input() recipe!: Recipe;
   @Output() reloadUi = new EventEmitter<void>();
+
+  people = 1;
 
   isOpen = false;
   isEditOpen = false;
@@ -41,6 +42,9 @@ export class CardComponent {
       this.closeBigCard();
     }
   }
+
+  printIngredient = (ingredient: Ingredient) => 
+     `${( !isNaN(ingredient.quantity) ? ingredient.quantity * this.people : ingredient.quantity)} ${ingredient.unit}`;
   
   async saveRecipe() {
 
@@ -66,6 +70,14 @@ export class CardComponent {
     this.reloadUi.emit();
   }
 
+  updatePeople(plus: number) {
+    const newValue = this.people + plus;
+
+    if(newValue > 0){
+      this.people = newValue;
+    }
+  }
+
   editRecipe(key: string, event: Event, index: number | undefined = undefined, secondKey: string | undefined = undefined){
     const value = (event.target as HTMLInputElement).value;
     type ObjectKey = keyof Recipe;
@@ -89,9 +101,6 @@ export class CardComponent {
         this.recipe[objKey] = value as never;
         break;
     }
-
-    this.closeButton();
-    this.reloadUi.emit();
   }
 
   deleteFromArray(key:string, index: number) {

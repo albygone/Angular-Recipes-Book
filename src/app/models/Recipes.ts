@@ -1,5 +1,3 @@
-import { Timestamp } from "mongodb";
-
 type Ingredient = {
     name: string;
     quantity: number;
@@ -8,9 +6,10 @@ type Ingredient = {
   
 type Recipe = {
     _id: string;
+    title: string
     description: string;
     difficulty: number;
-    timeSpan: Timestamp | null;
+    timeSpan: string;
     imageUrl: string;
     steps: string[];
     ingredients: Ingredient[];

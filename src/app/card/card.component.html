@@ -8,7 +8,9 @@
         <p *ngSwitchCase="5">Usa just eat</p>
         <p *ngSwitchDefault="">0</p>
     </div>
-    <div class="card__title">{{recipe.description}}</div>
+    <div class="card__title">{{recipe.title}}</div>
+    <div class="card__subtitle sottotitolo">{{recipe.description}}</div>
+    <div class="card__subtitle">⌚ {{recipe.timeSpan}}</div>
     <div class="card__wrapper">
         <button class="card__btn" (click)="openBigCard()">Apri</button>
     </div>
@@ -18,6 +20,21 @@
     <div class="editForm" *ngIf="isEditOpen">
 
         <h2>Generale</h2>
+
+        <br>
+
+        <div class="wave-group">
+            <input required="" type="text" class="input" value="{{recipe.title}}" (keyup)="editRecipe('title', $event)">
+            <span class="bar"></span>
+            <label class="label">
+              <span class="label-char" style="--index: 0">T</span>
+              <span class="label-char" style="--index: 1">i</span>
+              <span class="label-char" style="--index: 2">t</span>
+              <span class="label-char" style="--index: 3">o</span>
+              <span class="label-char" style="--index: 4">l</span>
+              <span class="label-char" style="--index: 5">o</span>
+            </label>
+        </div>
 
         <br>
 
@@ -36,6 +53,20 @@
               <span class="label-char" style="--index: 8">o</span>
               <span class="label-char" style="--index: 9">n</span>
               <span class="label-char" style="--index: 10">e</span>
+            </label>
+        </div>
+
+        <br>
+
+        <div class="wave-group">
+            <input required="" type="text" class="input" value="{{recipe.timeSpan}}" (keyup)="editRecipe('timeSpan', $event)">
+            <span class="bar"></span>
+            <label class="label">
+              <span class="label-char" style="--index: 0">T</span>
+              <span class="label-char" style="--index: 1">e</span>
+              <span class="label-char" style="--index: 2">m</span>
+              <span class="label-char" style="--index: 3">p</span>
+              <span class="label-char" style="--index: 4">o</span>
             </label>
         </div>
 
@@ -58,7 +89,7 @@
 
         <br />
         <div class="wave-group">
-            <input required="" type="number" max="5" min="1" step="1" class="input" value="{{recipe.difficulty}}" (keyup)="editRecipe('difficulty', $event)">
+            <input required="" type="number" max="5" min="1" step="1" class="input" value="{{recipe.difficulty}}" (keyup)="editRecipe('difficulty', $event)" (change)="editRecipe('difficulty', $event)">
             <span class="bar"></span>
             <label class="label">
               <span class="label-char" style="--index: 0">D</span>
@@ -79,6 +110,7 @@
 
         <h2>Preparazione</h2>
 
+        <br>
         <br>
         <h3>Ingredienti</h3>
         <br>
@@ -158,12 +190,19 @@
             <p *ngSwitchCase="5">Usa just eat</p>
             <p *ngSwitchDefault="">0</p>
         </div>
-        <div class="card__title__big">{{recipe.description}}</div>
+        <div class="card__title__big">{{recipe.title}}</div>
+        <div class="card__title card__description__big">{{recipe.description}}</div>
+        <div class="card__title card__description__big">⌚ {{recipe.timeSpan}}</div>
+        <div class="number-control">
+            <div class="number-left" (click)="updatePeople(-1)"></div>
+                <input type="number" readonly value="{{people}}" name="number" class="number-quantity">
+            <div class="number-right" (click)="updatePeople(1)"></div>
+        </div>
         <div class="card_scroll_big">
             <h3>Ingredienti</h3>
             <br>
             <ul>
-                <li *ngFor="let ingredient of recipe.ingredients">{{ingredient.name}}  ⚖️{{ingredient.quantity != -1 ? ingredient.quantity + ' ' + ingredient.unit : "A sentimento"}}</li>
+                <li *ngFor="let ingredient of recipe.ingredients">{{ingredient.name}}  ⚖️ {{ingredient.quantity != -1 ? printIngredient(ingredient) : "A sentimento"}}</li>
             </ul>
             <h3>Procedura</h3>
             <br>

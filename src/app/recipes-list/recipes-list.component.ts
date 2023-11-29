@@ -20,8 +20,12 @@ export class RecipesListComponent {
     ngOnChanges(value: any) {
         const change = value.query as SimpleChange;
         const query = change.currentValue as string;
+
         if (query && query != "") {
-            this.FilteredRecipes = this.Recipes.filter(recipe => recipe.description.toLowerCase().includes(query.toLowerCase()));
+            this.FilteredRecipes = this.Recipes.filter(recipe => recipe.title.toLowerCase().includes(query.toLowerCase()) ||
+             recipe.ingredients.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).length > 0);
+        }else{
+            this.FilteredRecipes = this.Recipes;
         }
     }
 
@@ -32,12 +36,13 @@ export class RecipesListComponent {
     addRecipe() {
         this.FilteredRecipes.push({
             _id: "",
-            description: "Nuova ricetta",
+            title: "Nuova ricetta",
+            description: "Una nuova bellissima ricetta",
             ingredients: [{name: "Fantasita", quantity: -1, unit: ""} as Ingredient],
             steps: ["Pensare", "Creare la nuova ricetta"],
             imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXpduMX-Kojm2uQyZhREZZlXG0eNBmvklgrKZeVHLH3j2KQmnqHKndWJ6zs1XaF8rSDx4&usqp=CAU",
             difficulty: 1,
-            timeSpan: null
+            timeSpan: ""
         });
     }
     

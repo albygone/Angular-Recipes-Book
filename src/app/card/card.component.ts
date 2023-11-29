@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Recipe, Ingredient } from '../models/Recipes';
 import { ApiControllerService } from '../services/api-controller.service';
 
@@ -10,6 +10,7 @@ import { ApiControllerService } from '../services/api-controller.service';
 export class CardComponent {
 
   @Input() recipe!: Recipe;
+  @Output() reloadUi = new EventEmitter<void>();
 
   isOpen = false;
   isEditOpen = false;
@@ -52,13 +53,18 @@ export class CardComponent {
       delete (objNew as {_id?: string})._id;
       await this.apiController.insertSingle(objNew);
     }
+
+    this.closeButton();
+    this.reloadUi.emit();
   }
   async deleteRecipe() {
     if(await this.apiController.check(new Map([["_id", this.recipe._id]]))){
       await this.apiController.delete(this.recipe);
     }
-  }
 
+    this.closeButton();
+    this.reloadUi.emit();
+  }
 
   editRecipe(key: string, event: Event, index: number | undefined = undefined, secondKey: string | undefined = undefined){
     const value = (event.target as HTMLInputElement).value;
@@ -83,6 +89,9 @@ export class CardComponent {
         this.recipe[objKey] = value as never;
         break;
     }
+
+    this.closeButton();
+    this.reloadUi.emit();
   }
 
   deleteFromArray(key:string, index: number) {

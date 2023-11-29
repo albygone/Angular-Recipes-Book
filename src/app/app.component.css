@@ -6,3 +6,17 @@ html {
   overflow-x: hidden;
   background-color: #464646;
 }
+
+img{
+  background-image: url("https://previews.123rf.com/images/halfpoint/halfpoint1505/halfpoint150500136/39484775-variet%C3%A0-di-prodotti-lattiero-caseari-di-cui-su-uno-sfondo-tavolo-di-legno.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  z-index: 0;
+  top:0;
+  bottom: 0;
+  height: 100vh;
+  width: 100vw;
+  filter: blur(8px);
+}

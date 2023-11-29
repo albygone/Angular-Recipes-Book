@@ -11,11 +11,18 @@ export class RecipesListComponent {
     readonly apiController = new ApiControllerService();
 
     Recipes!: Recipe[];
+    FilteredRecipes!: Recipe[];
 
-    @Input() query: string = ""; 
+    IsLoading: boolean = false;
 
-    ngOnChanges(changes: SimpleChange) {
-        console.log(changes);
+    @Input() query: string = "";
+
+    ngOnChanges(value: any) {
+        const change = value.query as SimpleChange;
+        const query = change.currentValue as string;
+        if (query && query != "") {
+            this.FilteredRecipes = this.Recipes.filter(recipe => recipe.description.toLowerCase().includes(query.toLowerCase()));
+        }
     }
 
     constructor() {
@@ -23,7 +30,7 @@ export class RecipesListComponent {
     }
 
     addRecipe() {
-        this.Recipes.push({
+        this.FilteredRecipes.push({
             _id: "",
             description: "Nuova ricetta",
             ingredients: [{name: "Fantasita", quantity: -1, unit: ""} as Ingredient],
@@ -33,9 +40,18 @@ export class RecipesListComponent {
             timeSpan: null
         });
     }
-        
     
     async getRecipes() {
+        this.IsLoading = true;
+
         this.Recipes = await this.apiController.getAllRecipes();
+        this.FilteredRecipes = this.Recipes;
+
+        if(this.query != "" )
+            this.ngOnChanges({query: new SimpleChange("", this.query, false)});
+
+        await new Promise( resolve => setTimeout(resolve, 1000) );
+        
+        this.IsLoading = false;
     }
 }
